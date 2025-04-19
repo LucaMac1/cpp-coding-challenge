@@ -11,6 +11,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+find_package(SFML 2.5 REQUIRED graphics window system)
+
 # Set the compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g -O0 -Wall -Wwrite-strings -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
@@ -22,14 +24,23 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 # set(SOURCES include/FizzBuzz.h src/FizzBuzz.cpp test/FizzBuzzTest.cpp)
 # set(SOURCES include/RomanNumeralsConverter.h src/RomanNumeralsConverter.cpp test/RomanNumeralsConverterTest.cpp)
 # set(SOURCES include/MyString.h src/MyString.cpp test/MyStringTest.cpp)
-set(SOURCES include/IPID.h include/PID.h src/PID.cpp test/PIDTest.cpp)
+# set(SOURCES include/IPID.h include/PID.h src/PID.cpp test/PIDTest.cpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+set(SOURCES src/main_plant_2.cpp src/InvertedPendulumSystem.cpp src/PID.cpp src/PositionSystem.cpp src/TemperatureSystem.cpp src/VelocitySystem.cpp)
+set(HEADERS include/InvertedPendulumSystem.h include/PID.h include/PositionSystem.h include/TemperatureSystem.h include/VelocitySystem.h)
 
-target_link_libraries(${PROJECT_NAME} gtest_main gmock_main)
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+)
+
+# target_link_libraries(${PROJECT_NAME} gtest_main gmock_main)
+
+# include(GoogleTest)
+# gtest_discover_tests(${PROJECT_NAME})
 
 find_program(GCOV_PATH gcov REQUIRED)
 find_program(LCOV_PATH lcov REQUIRED)
